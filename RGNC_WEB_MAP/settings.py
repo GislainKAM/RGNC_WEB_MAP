@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_gis",
     "leaflet",
+    "django_filters"
 ]
 
 MIDDLEWARE = [
@@ -143,4 +144,9 @@ LEAFLET_CONFIG = {
      {'attribution': '&copy; Big eye'}),
     ('Streets', 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {'attribution': '&copy; Contributors'})],
     'ATTRIBUTION_PREFIX': 'Powered by django-leaflet',
+}
+
+# ajout de django_filters a rest_framework
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }

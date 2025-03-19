@@ -9,5 +9,6 @@ router.register("borne", BornesViewSet, basename='borne')
 router.register("council", CouncilViewSet, basename='council')
 
 urlpatterns = [
-    path("api/", include(router.urls))
+    path("api/", include(router.urls)),
+    path("", HomeView, name="home"),
 ]

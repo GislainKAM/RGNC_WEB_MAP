@@ -1,0 +1,72 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil</title>
+    <link rel="stylesheet" href={% static "Map/css/style.css" %}>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href={% url "home" %}><img src="" alt="LOGO" class="LOGO"></a>
+            <a href="#" class="h1">A PROPOS</a>
+            <a href="#" class="h1">CONTACT</a>
+        </nav>
+    </header>
+
+    <aside>
+        <div id="filter_block">
+            <div id="title_block">
+                <h2>Filtre</h2>
+                <img src="" alt="">
+            </div>
+            <div id="filtre_content">
+                <div class="filter">
+                    <label for="region_filter">Region</label>
+                    <select name="region_filter" id="region_filter">
+                        <option value="">Toute les region</option>
+                        {%for region in council_region%}
+                            <option value={{region}}>{{region}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filter">
+                    <label for="departement_filter">departement</label>
+                    <select name="departement_filter" id="departement_filter">
+                        <option value="">Tout les departement</option>
+                        {% for departement in council_departement %}
+                            <option value={{departement}}>{{departement}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filter">
+                    <label for="council_filter">Commune</label>
+                    <select name="council_filter" id="council_filter">
+                        <option value="">Toutes les commune</option>
+                        {% for council in council_name %}
+                            <option value={{council}}>{{council}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div id="fiche_block">
+            <h2>Fiches Signalitique</h2>
+            <div class="fiche_content">
+                <ul id="fiche_list"></ul>
+            </div>
+            <button id="reset">Réinitialiser</button>
+            <button id="download">Télécharger</button>
+        </div>
+    </aside>
+
+    <main>
+        <div id="map"></div>
+    </main>
+
+    <script src={% static "Map/js/main.js" %}></script>
+</body>
+</html>
