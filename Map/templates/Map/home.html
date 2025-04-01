@@ -6,10 +6,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accueil</title>
-    <link rel="stylesheet" href={% static "Map/css/style_map.css" %}>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin="" />
+    <link rel="stylesheet" href={% static "Map/css/style_map.css" %}>
     <link rel="stylesheet" href={% static "Map/css/style.css" %}>
 </head>
 <body>
@@ -55,15 +55,16 @@
                             {% endfor %}
                         </select>
                     </div>
+                    <button id="reset">Réinitialiser</button>
                 </div>
             </div>
             <div id="fiche_block">
                 <h1>Fiches Signalitique</h1>
-                <div class="fiche_content">
-                    <ul id="fiche_list"></ul>
+                <div id="fiche_content">
                 </div>
-                <button id="reset">Réinitialiser</button>
+                <div id="button">
                 <button id="download">Télécharger</button>
+                </div>
             </div>
         </aside>
        <div id="map"></div> 
@@ -71,6 +72,12 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""></script>
-    <script src={% static "Map/js/main.js" %}></script>
+    <script>
+        const urlBorneBase = "{% static 'Map/img/BORNE_DE_BASE.png' %}"
+        const urlBorneRef = "{% static 'Map/img/BORNE_DE_REFERENCE.png' %}"
+        const urlbordercouncil = "{% static 'Map/img/fichier_3.png' %}"
+        const urldeleteicon = "{% static 'Map/img/annuler.png'%}"
+    </script>
+    <script src={% static "Map/js/main.js" %}> </script>
     </body>
 </html>

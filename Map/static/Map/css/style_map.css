@@ -1,6 +1,106 @@
-.leaflet-bottom .leaflet-bottom-center{
-    position: absolute ;
-    left: 50% ;
-    transform: translate(-50%) ;
-    bottom: 10px ;
+@font-face {
+    font-family: poppins-bold;
+    src: url(../fonts/Poppins-Bold.ttf);
+}
+
+@font-face {
+    font-family: poppins-medium;
+    src: url(../fonts/Poppins-Medium.ttf);
+}
+
+@font-face {
+    font-family: poppins-regular;
+    src: url(../fonts/Poppins-Regular.ttf);
+}
+:root{
+    /* couleur principal */
+    --df-background-color:#F0F2F2;
+    --df-font-color: #414F4D;
+
+    /* couleur secondaire */
+    --first-color:#55AC63;
+    --second-color:#395E5A;
+
+    /* font */
+    --title-font: poppins-bold;
+    --sub-title-font: poppins-medium;
+    --content-font: poppins-regular;
+
+    /* font size */
+    --font-size-title: 2rem;
+    --font-size-sub-title: 1,6rem;
+    --font-size-content-font: 0.8rem;
+}
+
+.leaflet-legend {
+    background: var(--df-background-color);
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    font-size: 14px;
+    line-height: 18px;
+    color: var(--df-font-color);
+}
+
+.leaflet-legend h4{
+    font-size: var(--font-size-sub-title);
+    font-family: var(--sub-title-font);
+    padding-bottom: 5px;
+}
+
+.leaflet-legend div{
+    display: flex;
+    justify-content: left;
+    gap: 10px;
+
+}
+
+.leaflet-legend img{
+    height: 15px;
+
+}
+
+.leaflet-legend small{
+    font-family: var(--content-font);
+    font-size: var(--font-size-content-font);   
+}
+
+.leaflet-popup-content{
+    display: flex;
+    justify-content: center;
+}
+
+.leaflet-pop{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    font-family: var(--content-font);
+    color: var(--df-font-color);
+}
+.leaflet-pop h3{
+    font-size: var(--font-size-sub-title);
+    font-family: var(--font-size-sub-title);
+    margin-bottom: 2px;
+}
+.infos-point{
+    border: 1px solid var(--df-font-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 3px;
+    padding: 5px;
+}
+
+.infos-point span{
+    text-decoration: underline;
+}
+
+.leaflet-popup-content button{
+    width: 100%;
+    background-color: var(--first-color);
+    color: var(--df-background-color);
+    border: none;
+    margin-top: 8px;
 }

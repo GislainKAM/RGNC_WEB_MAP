@@ -24,6 +24,7 @@ class Borne(models_gis.Model):
     lat = models_gis.CharField(max_length=25)
     lon = models_gis.CharField(max_length=25)
     place_name = models_gis.CharField(max_length=100, null=True)
+    reseau = models_gis.CharField(max_length=12, null=True)
     
     geom = models_gis.PointField()
     

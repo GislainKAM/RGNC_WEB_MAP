@@ -5,7 +5,7 @@ from Map.models import *
 
 class Borneserializer(GeoFeatureModelSerializer):
     class Meta:
-        fields = ("name", "matricule", "council", "place_name")
+        fields = ("name", "matricule", "council", "place_name","reseau")
         geo_field = "geom"
         model = Borne
 

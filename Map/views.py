@@ -15,7 +15,7 @@ class BornesViewSet(ReadOnlyModelViewSet):
     
     serializer_class = Borneserializer
     filter_backends = [DjangoFilterBackend]  # 🔹 Active DjangoFilterBackend
-    filterset_fields = ['matricule','council', 'name', 'place_name','council__name', 'council__region','council__departement']  # 🔹 Liste des champs filtrables
+    filterset_fields = ['matricule','council', 'name', 'place_name','reseau','council__name', 'council__region','council__departement']  # 🔹 Liste des champs filtrables
     queryset = Borne.objects.all()
     
 class CouncilViewSet(ReadOnlyModelViewSet):

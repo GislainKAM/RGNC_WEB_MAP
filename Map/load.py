@@ -21,6 +21,7 @@ bornes_mapping = {
     "lat": "RGNC_LATIT",
     "lon": "RGNC_LONGI",
     "place_name": "RGNC_LIEUX",
+    "reseau":"RGNC_RESEA",
     "geom": "POINT", 
 }
 
