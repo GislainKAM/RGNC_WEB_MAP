@@ -386,50 +386,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 
-
-
 // gestion des fiches signalitique(ajour des diches, suppression )
-
-
-
-// // ajouter un evement sur chaque boutons du poppup des bornes
-// addFiche = async function () {
-//     // recuperation des id des bornes
-//     let id_bornes = []
-//     get_id_bornes = async function () {
-//         await get_df_data()
-//         json_borne.features.forEach(element => {
-//         id_bornes.push(element.id)
-//        });
-//     }
-//     await get_id_bornes()
-
-//     id_bornes.forEach(id_borne => {
-//        const  button = document.getElementById(`${id_borne}`)
-
-//        button.addEventListener("click", () => {
-//         const list_content = document.querySelector("#list_content")
-
-//         // créer un nouvel élément de liste
-//         const list_item = document.createElement("div")
-//         list_item.classList.add("list_items")
-//         list_item.id=`${id_borne}`
-
-//         list_item.innerHTML = `
-//             <span class="name">${id_borne}</span>
-//             <span class="dots"></span>
-//             <button class="remove-btn">&times;</button>
-//         `
-//         listItem.querySelector(".remove-btn").addEventListener("click", function() {
-//             listContainer.removeChild(list_item);
-//         });
-//         list_content.appendChild(list_item)
-
-//        })
-//     })
-
-
-// };
 
 map.on("popupopen", function(e){
     
@@ -465,3 +422,75 @@ map.on("popupopen", function(e){
     });
     }
 })
+
+
+//_____________________________gestion de telechargement des fiches_______________________________________________ 
+
+
+function getFichesList() {
+    let fiches = [];
+    document.querySelectorAll(".fiche_items").forEach(item => {
+        let filePath = `${pdfpath}/${encodeURIComponent(item.id)}.pdf`;
+        if (filePath) {
+            fiches.push(filePath);
+        }
+    });
+    return fiches;
+}
+
+function downloadSingleFile(fileUrl) {
+    let link = document.createElement("a");
+    link.href = encodeURI(fileUrl);
+    link.download = fileUrl.split('/').pop();
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+async function downloadAsZip(files) {
+    let zip = new JSZip();
+    
+    for (let fileUrl of files) {
+        try {
+            let response = await fetch(fileUrl);
+            if (!response.ok) {
+                console.warn(`Fichier introuvable : ${fileUrl}`);
+                continue;
+            }
+            let fileName = fileUrl.split('/').pop();
+            let fileData = await response.blob();
+            zip.file(fileName, fileData);
+        } catch (error) {
+            console.error(`Erreur lors du téléchargement : ${fileUrl}`, error);
+        }
+    }
+
+    zip.generateAsync({ type: "blob" }).then(function(content) {
+        let link = document.createElement("a");
+        link.href = URL.createObjectURL(content);
+        link.download = "fiches.zip";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+}
+
+function downloadFiches() {
+    let fiches = getFichesList();
+    console.log(fiches);
+    
+    if (fiches.length === 0) {
+        alert("Aucune fiche sélectionnée !");
+        return;
+    }
+
+    if (fiches.length === 1) {
+        downloadSingleFile(fiches[0]);
+    } else {
+        downloadAsZip(fiches);
+    }
+}
+
+document.getElementById("download").addEventListener("click", () => {
+    downloadFiches();
+});
