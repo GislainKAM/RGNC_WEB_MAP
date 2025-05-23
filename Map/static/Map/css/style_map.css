@@ -108,3 +108,20 @@
     }
     }
 
+ .leaflet-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none; /* si les enfants ne doivent pas capter les clics */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    }
+
+.leaflet-top.leaflet-center {
+    top: 10px;
+    }
+
+.leaflet-bottom.leaflet-center {
+    bottom: 10px;
+    }

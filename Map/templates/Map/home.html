@@ -9,8 +9,10 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin="" />
+    <link rel="stylesheet" href="{% static '/Map/dist/leaflet-search.min.css' %}">
     <link rel="stylesheet" href={% static "Map/css/style_map.css" %}>
     <link rel="stylesheet" href={% static "Map/css/style.css" %}>
+
 </head>
 <body>
     <header>
@@ -29,7 +31,7 @@
         <aside>
             <div id="filter_block">
                 <div id="title_block">
-                    <h1>Filtre</h1>
+                    <h1>Filtres</h1>
                     <img src={% static "Map/img/icons8-filtre-100.png" %} alt="filter">
                 </div>
                 <div id="filter_content">
@@ -64,7 +66,7 @@
                 </div>
             </div>
             <div id="fiche_block">
-                <h1>Fiches Signalitique</h1>
+                <h1>Fiches Signalétique</h1>
                 <div id="fiche_content">
                 </div>
                 <div id="button">
@@ -77,6 +79,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""></script>
+    <script src="{% static 'Map/dist/leaflet-search.min.js' %}"></script>
     <script>
         const urlBorneBase = "{% static 'Map/img/BORNE_DE_BASE.png' %}"
         const urlBorneRef = "{% static 'Map/img/BORNE_DE_REFERENCE.png' %}"
@@ -84,6 +87,7 @@
         const urldeleteicon = "{% static 'Map/img/annuler.png'%}"
         const pdfpath ="{% static 'Map/data/fiche_signalitique'%}"
     </script>
+    <!-- Inclure le plugin si ce n'est pas déjà fait -->
     <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
     <script src={% static "Map/js/main.js" %}> </script>
     </body>

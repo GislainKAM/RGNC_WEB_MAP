@@ -177,17 +177,50 @@ let style_council = {style : {
 }}
 let layers = L.layerGroup().addTo(map);
 
+function getIconSize(zoom) {
+  const scale = Math.min(4, zoom / 1.3);
+
+  // À partir du zoom 6, bloquer la taille à 3
+  return zoom >= 10 ? [2.5, 2.5] : [scale, scale];
+}
+
+// ____________________________________changement de l'icone selon le niveau de zoom____________________________
 
 function getCustomIcon(RESEAU) {
+    const zoom = map.getZoom();
+    const size = getIconSize(zoom); // ex : [scaleX, scaleY]
+
+    // Exemple : calcul d'une taille d'icône dynamique
+    const width = 49.5 / size[0];
+    const height = 39.5 / size[1];
+
     return L.icon({
-        iconUrl: RESEAU==="BASE"
-        ? urlBorneBase
-        : urlBorneRef,
-        iconSize: [49.5/2.5, 39.3/2.5],
-        iconAnchor: [24.75/2.5, 39.3/2.5],
-        popupAnchor: [0, -39.3/2.5]
-    })
+        iconUrl: RESEAU === "BASE" ? urlBorneBase : urlBorneRef,
+        iconSize: [width, height],
+        iconAnchor: [width / 2, height], // bas de l'icône centré
+        popupAnchor: [0, -height / 2] // vers le haut
+    });
 }
+
+
+// Réajustement des tailles au changement de zoom
+map.on('zoomend', () => {
+  layers.eachLayer(subLayer => {
+    // Vérifie si c'est une couche GeoJSON
+    if (subLayer instanceof L.GeoJSON) {
+      subLayer.eachLayer(featureLayer => {
+        // Ne traiter que les points (markers)
+        if (featureLayer instanceof L.Marker) {
+          const reseau = featureLayer.feature?.properties?.reseau;
+          if (reseau) {
+            featureLayer.setIcon(getCustomIcon(reseau));
+          }
+        }
+      });
+    }
+  });
+});
+
 
 // Fonction pour ajouter une légende à la carte
 function addLegend(map) {
@@ -212,13 +245,18 @@ function addLegend(map) {
 addLegend(map);
 
 // ensembles des parametre qui permettent de définir la symbologie des couches et leurs pop
-const setIconBorne =  {
+const setIconBorne ={
     pointToLayer: function(feature, latlng){
         return L.marker(latlng, {
             icon: getCustomIcon(feature.properties.reseau)
         });
     }
     , onEachFeature: function(feature, layer){
+        // Crée un champ combiné
+        feature.properties.searchField = (
+        (feature.properties.place_name || '') + ', ' +"commune de: " +
+        (feature.properties.council || '')
+        ).toLowerCase();
         return layer.bindPopup(
             `
             <div class="leaflet-pop">
@@ -494,3 +532,75 @@ function downloadFiches() {
 document.getElementById("download").addEventListener("click", () => {
     downloadFiches();
 });
+
+// _________________________________________________bares de recherche__________________________________________
+
+// Ajoute des zones personnalisées après que la carte soit initialisée
+map.on('load', function () {
+    const container = map.getContainer();
+    const controlContainer = container.querySelector('.leaflet-control-container');
+
+    // Créer les divs pour topcenter et bottomcenter
+    const topCenter = document.createElement('div');
+    topCenter.className = 'leaflet-top leaflet-center';
+    controlContainer.appendChild(topCenter);
+
+    const bottomCenter = document.createElement('div');
+    bottomCenter.className = 'leaflet-bottom leaflet-center';
+    controlContainer.appendChild(bottomCenter);
+});
+
+var searchControl = new L.Control.Search({
+  layer: layers,
+  propertyName: "searchField",
+  marker: false,
+  collapsed: false,
+  caseSensitive: false,
+  textPlaceholder: "rechercher une borne",
+  filterData: function(text, records) {
+  // texte tapé par l'utilisateur
+  text = text.toLowerCase();  
+
+  const filtered = {}; // résultats trouvés
+
+  // pour chaque feature dans la couche
+  for (var key in records) {
+    var props = records[key].layer.feature.properties;
+
+    var val = (props.searchField || '').toLowerCase(); // le champ `nom` qu'on veut chercher
+
+    // si le champ contient le texte tapé
+    if (val.includes(text)) {
+      filtered[key] = records[key];  // on garde cette feature
+    }
+  }
+
+  return filtered;
+},         // permet de chercher à l'intérieur du texte
+  moveToLocation: function(latlng, title, map) {
+    map.setView(latlng, 16);   // Zoom sur le résultat
+  }
+}).addTo(map);
+
+//  Attendre que le contrôle soit réellement créé dans le DOM
+setTimeout(() => {
+    // Trouver le conteneur du geocoder
+    var SearchContainer = document.querySelector('.leaflet-control-search');
+
+    
+    if (!SearchContainer) {
+        console.error("Le conteneur du geocoder n'a pas été trouvé");
+        return;
+    }
+    
+    // Créer ou trouver le conteneur central
+    var centerContainer = document.querySelector('.leaflet-top.leaflet-center');
+    if (!centerContainer) {
+        centerContainer = L.DomUtil.create('div', 'leaflet-top leaflet-center');
+        map.getContainer().appendChild(centerContainer);
+    }
+    
+    // Déplacer le search ontrol
+    centerContainer.appendChild(SearchContainer);
+}, 100);
+
